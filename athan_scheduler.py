@@ -34,38 +34,6 @@ def parse_time_str(t, today):
     h, m = map(int, str(t).split(":"))
     return datetime.datetime.combine(today, datetime.time(hour=h, minute=m))
 
-def load_prayer_times_from_pdf():
-    pdf_path = get_pdf_filename()
-    tables = camelot.read_pdf(pdf_path, pages="all")
-    if not tables:
-        raise RuntimeError("No tables found in PDF")
-
-    # Pick the largest table
-    df = tables[0].df
-
-    # Clean header
-    df.columns = df.iloc[0]
-    df = df.drop(0).reset_index(drop=True)
-
-    today = datetime.date.today()
-    day = today.day
-
-    if day > len(df):
-        raise IndexError(f"Day {day} not found in timetable (only {len(df)} rows).")
-
-    row = df.iloc[day - 1]
-
-    prayer_times = {
-        "Fajr": parse_time_str(row["Begins"], today),
-        "Dhuhr": parse_time_str(row["Begins.1"], today),
-        "Asr": parse_time_str(row["Begins.2"], today),
-        "Maghrib": parse_time_str(row["Begins.3"], today),
-        "Isha": parse_time_str(row["Begins.4"], today),
-    }
-
-    return prayer_times
-
-
 # --- API fallback ---
 def load_prayer_times_from_api():
     today = datetime.date.today()
@@ -99,12 +67,7 @@ def schedule_todays_prayers():
     scheduler.remove_all_jobs()
     today = datetime.date.today()
 
-    try:
-        prayer_times = load_prayer_times_from_pdf()
-        print("✅ Loaded prayer times from PDF")
-    except Exception as e:
-        print(f"⚠️ PDF failed ({e}), falling back to API...")
-        prayer_times = load_prayer_times_from_api()
+    prayer_times = load_prayer_times_from_api()
 
     for prayer, dt in prayer_times.items():
         if dt < datetime.datetime.now():
