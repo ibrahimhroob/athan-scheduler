@@ -1,12 +1,9 @@
-import pandas as pd
 import datetime
 import time
 import os
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from playsound import playsound
-import tabula
-import camelot
 
 # === CONFIG ===
 PDF_DIR = "./calendar"   # Folder containing monthly prayer timetable PDFs
@@ -34,7 +31,6 @@ def parse_time_str(t, today):
     h, m = map(int, str(t).split(":"))
     return datetime.datetime.combine(today, datetime.time(hour=h, minute=m))
 
-# --- API fallback ---
 def load_prayer_times_from_api():
     today = datetime.date.today()
     url = f"http://api.aladhan.com/v1/timings/{today.day}-{today.month}-{today.year}"
