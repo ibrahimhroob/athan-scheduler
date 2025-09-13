@@ -13,7 +13,7 @@ PDF_DIR = "./calendar"   # Folder containing monthly prayer timetable PDFs
 LAT = 53.2307   # Example: Lincoln, UK
 LON = -0.5406
 METHOD = 2      # Islamic Society of North America (ISNA) calc method
-SCHOOL = 2     # 2 = Hanafi
+SCHOOL = 1     # 0 = Shafi'i, 1 = Hanafi
 PRAYERS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]
 
 scheduler = BackgroundScheduler()
