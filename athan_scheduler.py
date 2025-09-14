@@ -80,7 +80,7 @@ scheduler.start()
 schedule_todays_prayers()
 scheduler.add_job(daily_refresh, "cron", hour=0, minute=0)
 
-print("📅 Prayer scheduler running (PDF + API fallback).")
+print("📅 Prayer scheduler running.")
 try:
     while True:
         time.sleep(60)
